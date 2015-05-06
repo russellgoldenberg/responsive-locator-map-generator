@@ -83,7 +83,7 @@
 			console.log(response);
 			if(response) {
 				if(response.features && response.features.length) {
-					var coords = response.features[0].center[0] +  ',' + response.features[0].center[1];
+					var coords = response.features[0].center[1] +  ',' + response.features[0].center[0];
 					cb(null, coords);	
 				} else {
 					cb('could not find anything');

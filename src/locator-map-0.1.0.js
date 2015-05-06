@@ -23,7 +23,7 @@ var setupMap = function() {
 			};
 
 			if(icon) {
-				iconOptions['marker-icon'] = icon;
+				iconOptions['marker-symbol'] = icon;
 			}
 
 			var marker = L.marker(latlng, { icon: L.mapbox.marker.icon(iconOptions)
