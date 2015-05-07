@@ -1,20 +1,21 @@
 /*styles for graphic info (hed, subhed, source, credit)*/
 .rg-container {
+	width: 100%;
 	font-family: Helvetica, Arial, sans-serif;
 	font-size: 16px;
 	line-height: 1;
-	margin: 0;
-	padding: 1em 0;
+	margin: 1em 0;
+	padding: 0.75em 0 0 0;
 	color: #1a1a1a;
+	border-top: 1px solid #ccc;
 }
 .rg-header {
-	margin-bottom: 1em;
+	margin-bottom: 0.5em;
 }
 .rg-hed {
 	font-family: "Benton Sans Bold", Helvetica, Arial, sans-serif;
 	font-weight: bold;
 	font-size: 1.35em;
-	margin-bottom: 0.25em;
 }
 .rg-subhed {
 	font-size: 1em;
@@ -53,10 +54,16 @@
 	float: none;
 	text-align: right;
 }
+.rg-container.pull-map-right {
+	float: none;
+	max-width: 100%;
+	width: 100%;
+	margin-left: 0;
+}
 }
 /*styles for graphic*/
 .rg-map {
-	margin: 0 0 1em 0;
+	margin: 0;
 	width: 100%;
 	font-family: Helvetica, Arial, sans-serif;
 	font-size: 1em;
@@ -74,6 +81,12 @@
 	vertical-align: baseline;
 	text-align: left;
 	color: #333;
+}
+.rg-container.pull-map-right {
+	float: right;
+	max-width: 320px;
+	width: 100%;
+	margin-left: 1em;
 }
 .rg-map-container {
 	width: 100%;

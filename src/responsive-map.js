@@ -1,5 +1,7 @@
 (function() {
 	'use strict';
+	var _filepath;
+	var _version = '0.1.0';
 	var _input;
 	var _output;
 	var _failed;
@@ -9,7 +11,8 @@
 	var _options = {
 		zoom: 11,
 		popup: null,
-		icon: null
+		icon: null,
+		inline: null
 	};
 	var _copy = {
 		hed: 'Hed',
@@ -20,6 +23,7 @@
 	};
 
 	function init() {
+		_filepath = window.location.hostname === 'localhost' ? 'src/' : 'http://apps.bostonglobe.com/common/js/locator-map/'; 
 		bindEvents();
 	}
 
@@ -55,6 +59,18 @@
 
 		$('.generate-code').on('click', function() {
 			generateCode();
+		});
+
+		$('.option-fullwidth').on('click', function() {
+			_options.inline = null;
+			$('.inline button').removeClass('selected');
+			$(this).addClass('selected');
+		});
+
+		$('.option-inline').on('click', function() {
+			_options.inline = true;
+			$('.inline button').removeClass('selected');
+			$(this).addClass('selected');
 		});
 	}
 
@@ -116,7 +132,7 @@
 		mapContent += '>'
 		mapContent += '</div>';
 		mapContent += '</div>'
-		mapContent += '<script src="http://apps.bostonglobe.com/common/js/locator-map/locator-map-0.1.0.js" type="text/javascript"></script>';
+		mapContent += '<script src="' + _filepath + 'locator-map-' + _version + '.js" type="text/javascript"></script>';
 
 		$content.append(mapContent);
 
@@ -150,7 +166,9 @@
 
 		html += '<style>' + css + '\n</style>';
 
-		html += '\n<div class="rg-container">';
+		var classOption = _options.inline ? ' pull-map-right' : '';
+		
+		html += '\n<div class="rg-container' + classOption + '">';
 		html += '\n\t<div class="rg-header">';
 
 		if(_copy.hed.length > 0 ) {
@@ -176,7 +194,7 @@
 		html += '\n\t\t</div>';
 		html += '\n\t</div>';
 		html += '\n</div>';
-		html += '\n<script src="http://apps.bostonglobe.com/common/js/locator-map/locator-map-0.1.0.js" type="text/javascript"></script>';
+		html += '\n<script src="' + _filepath + 'locator-map-' + _version + '.js" type="text/javascript"></script>';
 
 		$('.output-code').val(html);
 		$('.final').removeClass('hide');

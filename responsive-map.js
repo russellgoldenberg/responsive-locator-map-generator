@@ -1,5 +1,7 @@
 (function() {
 	'use strict';
+	var _filepath;
+	var _version = '0.1.0';
 	var _input;
 	var _output;
 	var _failed;
@@ -9,7 +11,8 @@
 	var _options = {
 		zoom: 11,
 		popup: null,
-		icon: null
+		icon: null,
+		inline: null
 	};
 	var _copy = {
 		hed: 'Hed',
@@ -20,6 +23,7 @@
 	};
 
 	function init() {
+		_filepath = window.location.hostname === 'localhost' ? 'src/' : 'http://apps.bostonglobe.com/common/js/locator-map/'; 
 		bindEvents();
 	}
 
@@ -55,6 +59,18 @@
 
 		$('.generate-code').on('click', function() {
 			generateCode();
+		});
+
+		$('.option-fullwidth').on('click', function() {
+			_options.inline = null;
+			$('.inline button').removeClass('selected');
+			$(this).addClass('selected');
+		});
+
+		$('.option-inline').on('click', function() {
+			_options.inline = true;
+			$('.inline button').removeClass('selected');
+			$(this).addClass('selected');
 		});
 	}
 
@@ -104,7 +120,7 @@
 		// var $source = $('<div contenteditable="true" class="rg-source"><span class="pre-colon">' + _copy.sourcePre + '</span>: <span class="post-colon">' + _copy.sourcePost + '</span></div>');
 		// var $credit = $('<div contenteditable="true" class="rg-credit">' + _copy.credit + '</div>');
 		
-		var $inlineStyle = '<style>/*styles for graphic info (hed, subhed, source, credit)*/\n.rg-container {\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 16px;\n\tline-height: 1;\n\tmargin: 0;\n\tpadding: 1em 0;\n\tcolor: #1a1a1a;\n}\n.rg-header {\n\tmargin-bottom: 1em;\n}\n.rg-hed {\n\tfont-family: "Benton Sans Bold", Helvetica, Arial, sans-serif;\n\tfont-weight: bold;\n\tfont-size: 1.35em;\n\tmargin-bottom: 0.25em;\n}\n.rg-subhed {\n\tfont-size: 1em;\n\tline-height: 1.4em;\n}\n.rg-source-and-credit {\n\tfont-family: Georgia,"Times New Roman", Times,serif;\n\twidth: 100%;\n\toverflow: hidden;\n\tmargin-top: 1em;\n}\n.rg-source {\n\tmargin: 0;\n\tfloat: left;\n\tfont-weight: bold;\n\tfont-size: 0.75em;\n\tline-height: 1.5em;\n}\n.rg-source .pre-colon {\n\ttext-transform: uppercase;\n}\n.rg-credit {\n\tmargin: 0;\n\tcolor: #999;\n\ttext-transform: uppercase;\n\tletter-spacing: 0.05em;\n\tfloat: right;\n\ttext-align: right;\n\tfont-size: 0.65em;\n\tline-height: 1.5em;\n}\n@media (max-width: 640px) {\n.rg-source-and-credit > div {\n\twidth: 100%;\n\tdisplay: block;\n\tfloat: none;\n\ttext-align: right;\n}\n}\n/*styles for graphic*/\n.rg-map {\n\tmargin: 0 0 1em 0;\n\twidth: 100%;\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 1em;\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}\n.rg-map * {\n\t-moz-box-sizing: border-box;\n\tbox-sizing: border-box;\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n\ttext-align: left;\n\tcolor: #333;\n}\n.rg-map-container {\n\twidth: 100%;\n\theight: 320px;\n}\n.leaflet-container p.rg-map-popup {\n\tpadding: 0 0.75em 0.5em 0.75em;\n\tmargin: 0;\n}\n.leaflet-container .leaflet-control-attribution {\n\tdisplay: none;\n}</style>';
+		var $inlineStyle = '<style>/*styles for graphic info (hed, subhed, source, credit)*/\n.rg-container {\n\twidth: 100%;\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 16px;\n\tline-height: 1;\n\tmargin: 1em 0;\n\tpadding: 0.75em 0 0 0;\n\tcolor: #1a1a1a;\n\tborder-top: 1px solid #ccc;\n}\n.rg-header {\n\tmargin-bottom: 0.5em;\n}\n.rg-hed {\n\tfont-family: "Benton Sans Bold", Helvetica, Arial, sans-serif;\n\tfont-weight: bold;\n\tfont-size: 1.35em;\n}\n.rg-subhed {\n\tfont-size: 1em;\n\tline-height: 1.4em;\n}\n.rg-source-and-credit {\n\tfont-family: Georgia,"Times New Roman", Times,serif;\n\twidth: 100%;\n\toverflow: hidden;\n\tmargin-top: 1em;\n}\n.rg-source {\n\tmargin: 0;\n\tfloat: left;\n\tfont-weight: bold;\n\tfont-size: 0.75em;\n\tline-height: 1.5em;\n}\n.rg-source .pre-colon {\n\ttext-transform: uppercase;\n}\n.rg-credit {\n\tmargin: 0;\n\tcolor: #999;\n\ttext-transform: uppercase;\n\tletter-spacing: 0.05em;\n\tfloat: right;\n\ttext-align: right;\n\tfont-size: 0.65em;\n\tline-height: 1.5em;\n}\n@media (max-width: 640px) {\n.rg-source-and-credit > div {\n\twidth: 100%;\n\tdisplay: block;\n\tfloat: none;\n\ttext-align: right;\n}\n.rg-container.pull-map-right {\n\tfloat: none;\n\tmax-width: 100%;\n\twidth: 100%;\n\tmargin-left: 0;\n}\n}\n/*styles for graphic*/\n.rg-map {\n\tmargin: 0;\n\twidth: 100%;\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 1em;\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}\n.rg-map * {\n\t-moz-box-sizing: border-box;\n\tbox-sizing: border-box;\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n\ttext-align: left;\n\tcolor: #333;\n}\n.rg-container.pull-map-right {\n\tfloat: right;\n\tmax-width: 320px;\n\twidth: 100%;\n\tmargin-left: 1em;\n}\n.rg-map-container {\n\twidth: 100%;\n\theight: 320px;\n}\n.leaflet-container p.rg-map-popup {\n\tpadding: 0 0.75em 0.5em 0.75em;\n\tmargin: 0;\n}\n.leaflet-container .leaflet-control-attribution {\n\tdisplay: none;\n}</style>';
 
 		_mapId = createId(_coords);
 
@@ -116,7 +132,7 @@
 		mapContent += '>'
 		mapContent += '</div>';
 		mapContent += '</div>'
-		mapContent += '<script src="http://apps.bostonglobe.com/common/js/locator-map/locator-map-0.1.0.js" type="text/javascript"></script>';
+		mapContent += '<script src="' + _filepath + 'locator-map-' + _version + '.js" type="text/javascript"></script>';
 
 		$content.append(mapContent);
 
@@ -146,11 +162,13 @@
 
 		var html = '';
 
-		var css = '/*styles for graphic info (hed, subhed, source, credit)*/\n.rg-container {\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 16px;\n\tline-height: 1;\n\tmargin: 0;\n\tpadding: 1em 0;\n\tcolor: #1a1a1a;\n}\n.rg-header {\n\tmargin-bottom: 1em;\n}\n.rg-hed {\n\tfont-family: "Benton Sans Bold", Helvetica, Arial, sans-serif;\n\tfont-weight: bold;\n\tfont-size: 1.35em;\n\tmargin-bottom: 0.25em;\n}\n.rg-subhed {\n\tfont-size: 1em;\n\tline-height: 1.4em;\n}\n.rg-source-and-credit {\n\tfont-family: Georgia,"Times New Roman", Times,serif;\n\twidth: 100%;\n\toverflow: hidden;\n\tmargin-top: 1em;\n}\n.rg-source {\n\tmargin: 0;\n\tfloat: left;\n\tfont-weight: bold;\n\tfont-size: 0.75em;\n\tline-height: 1.5em;\n}\n.rg-source .pre-colon {\n\ttext-transform: uppercase;\n}\n.rg-credit {\n\tmargin: 0;\n\tcolor: #999;\n\ttext-transform: uppercase;\n\tletter-spacing: 0.05em;\n\tfloat: right;\n\ttext-align: right;\n\tfont-size: 0.65em;\n\tline-height: 1.5em;\n}\n@media (max-width: 640px) {\n.rg-source-and-credit > div {\n\twidth: 100%;\n\tdisplay: block;\n\tfloat: none;\n\ttext-align: right;\n}\n}\n/*styles for graphic*/\n.rg-map {\n\tmargin: 0 0 1em 0;\n\twidth: 100%;\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 1em;\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}\n.rg-map * {\n\t-moz-box-sizing: border-box;\n\tbox-sizing: border-box;\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n\ttext-align: left;\n\tcolor: #333;\n}\n.rg-map-container {\n\twidth: 100%;\n\theight: 320px;\n}\n.leaflet-container p.rg-map-popup {\n\tpadding: 0 0.75em 0.5em 0.75em;\n\tmargin: 0;\n}\n.leaflet-container .leaflet-control-attribution {\n\tdisplay: none;\n}';
+		var css = '/*styles for graphic info (hed, subhed, source, credit)*/\n.rg-container {\n\twidth: 100%;\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 16px;\n\tline-height: 1;\n\tmargin: 1em 0;\n\tpadding: 0.75em 0 0 0;\n\tcolor: #1a1a1a;\n\tborder-top: 1px solid #ccc;\n}\n.rg-header {\n\tmargin-bottom: 0.5em;\n}\n.rg-hed {\n\tfont-family: "Benton Sans Bold", Helvetica, Arial, sans-serif;\n\tfont-weight: bold;\n\tfont-size: 1.35em;\n}\n.rg-subhed {\n\tfont-size: 1em;\n\tline-height: 1.4em;\n}\n.rg-source-and-credit {\n\tfont-family: Georgia,"Times New Roman", Times,serif;\n\twidth: 100%;\n\toverflow: hidden;\n\tmargin-top: 1em;\n}\n.rg-source {\n\tmargin: 0;\n\tfloat: left;\n\tfont-weight: bold;\n\tfont-size: 0.75em;\n\tline-height: 1.5em;\n}\n.rg-source .pre-colon {\n\ttext-transform: uppercase;\n}\n.rg-credit {\n\tmargin: 0;\n\tcolor: #999;\n\ttext-transform: uppercase;\n\tletter-spacing: 0.05em;\n\tfloat: right;\n\ttext-align: right;\n\tfont-size: 0.65em;\n\tline-height: 1.5em;\n}\n@media (max-width: 640px) {\n.rg-source-and-credit > div {\n\twidth: 100%;\n\tdisplay: block;\n\tfloat: none;\n\ttext-align: right;\n}\n.rg-container.pull-map-right {\n\tfloat: none;\n\tmax-width: 100%;\n\twidth: 100%;\n\tmargin-left: 0;\n}\n}\n/*styles for graphic*/\n.rg-map {\n\tmargin: 0;\n\twidth: 100%;\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 1em;\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}\n.rg-map * {\n\t-moz-box-sizing: border-box;\n\tbox-sizing: border-box;\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n\ttext-align: left;\n\tcolor: #333;\n}\n.rg-container.pull-map-right {\n\tfloat: right;\n\tmax-width: 320px;\n\twidth: 100%;\n\tmargin-left: 1em;\n}\n.rg-map-container {\n\twidth: 100%;\n\theight: 320px;\n}\n.leaflet-container p.rg-map-popup {\n\tpadding: 0 0.75em 0.5em 0.75em;\n\tmargin: 0;\n}\n.leaflet-container .leaflet-control-attribution {\n\tdisplay: none;\n}';
 
 		html += '<style>' + css + '\n</style>';
 
-		html += '\n<div class="rg-container">';
+		var classOption = _options.inline ? ' pull-map-right' : '';
+		
+		html += '\n<div class="rg-container' + classOption + '">';
 		html += '\n\t<div class="rg-header">';
 
 		if(_copy.hed.length > 0 ) {
@@ -176,7 +194,7 @@
 		html += '\n\t\t</div>';
 		html += '\n\t</div>';
 		html += '\n</div>';
-		html += '\n<script src="http://apps.bostonglobe.com/common/js/locator-map/locator-map-0.1.0.js" type="text/javascript"></script>';
+		html += '\n<script src="' + _filepath + 'locator-map-' + _version + '.js" type="text/javascript"></script>';
 
 		$('.output-code').val(html);
 		$('.final').removeClass('hide');

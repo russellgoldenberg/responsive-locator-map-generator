@@ -1,7 +1,6 @@
 var setupMap = function() {
 	var _token = 'pk.eyJ1IjoiZ2FicmllbC1mbG9yaXQiLCJhIjoiVldqX21RVSJ9.Udl7GDHMsMh8EcMpxIr2gA';
 	var _rgMapContainers = document.getElementsByClassName('rg-map-container');
-	var _rgMaps = [];
 
 	if(_rgMapContainers.length) {
 		for(var i = 0; i < _rgMapContainers.length; i++) {
@@ -11,29 +10,34 @@ var setupMap = function() {
 			var zoom = el.dataset.zoom || 11;
 			var popup = el.dataset.popup || false;
 			var icon = el.dataset.icon || false;
+			var loaded = el.dataset.loaded || false;
 
-			L.mapbox.accessToken = _token;
-			var latlng = L.latLng([coords.lat, coords.lng]);
+			if(!loaded) {
 
-			_rgMaps.push(L.mapbox.map(id, 'gabriel-florit.li1b7gf6', {'center': latlng , 'zoom': zoom, 'scrollWheelZoom': false, 'touchZoom': false}));
+				el.dataset.loaded = 'loaded';
+				L.mapbox.accessToken = _token;
+				var latlng = L.latLng([coords.lat, coords.lng]);
 
-			var iconOptions = {
-        		'marker-size': 'large',
-        		'marker-color': '#59889d'
-			};
+				var map = L.mapbox.map(id, 'gabriel-florit.li1b7gf6', {'center': latlng , 'zoom': zoom, 'scrollWheelZoom': false, 'touchZoom': false});
 
-			if(icon) {
-				iconOptions['marker-symbol'] = icon;
-			}
+				var iconOptions = {
+	        		'marker-size': 'large',
+	        		'marker-color': '#59889d'
+				};
 
-			var marker = L.marker(latlng, { icon: L.mapbox.marker.icon(iconOptions)
-			});
+				if(icon) {
+					iconOptions['marker-symbol'] = icon;
+				}
 
-			marker.addTo(_rgMaps[i]);
+				var marker = L.marker(latlng, { icon: L.mapbox.marker.icon(iconOptions)
+				});
 
-			if(popup) {
-				var content = '<p class="rg-map-popup">' + popup + '</p>';
-				marker.bindPopup(content);
+				marker.addTo(map);
+
+				if(popup) {
+					var content = '<p class="rg-map-popup">' + popup + '</p>';
+					marker.bindPopup(content);
+				}
 			}
 		}
 	}

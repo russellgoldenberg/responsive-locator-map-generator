@@ -5,3 +5,10 @@ textarea.address {
 a.demo {
 	display: block;
 }
+.inline button {
+	display: inline-block;
+	background: #999;
+}
+.inline button.selected {
+	background: #1a1a1a;
+}
