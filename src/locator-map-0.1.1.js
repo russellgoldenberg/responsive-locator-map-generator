@@ -1,6 +1,7 @@
 var setupMap = function() {
 	var _token = 'pk.eyJ1IjoiZ2FicmllbC1mbG9yaXQiLCJhIjoiVldqX21RVSJ9.Udl7GDHMsMh8EcMpxIr2gA';
 	var _rgMapContainers = document.getElementsByClassName('rg-map-container');
+	var _dev = {};
 
 	if(_rgMapContainers.length) {
 		for(var i = 0; i < _rgMapContainers.length; i++) {
@@ -13,12 +14,12 @@ var setupMap = function() {
 			var loaded = el.dataset.loaded || false;
 
 			if(!loaded) {
-
 				el.dataset.loaded = 'loaded';
 				L.mapbox.accessToken = _token;
 				var latlng = L.latLng([coords.lat, coords.lng]);
 
 				var map = L.mapbox.map(id, 'gabriel-florit.li1b7gf6', {'center': latlng , 'zoom': zoom, 'scrollWheelZoom': false, 'touchZoom': false});
+				_dev.map = map;
 
 				var iconOptions = {
 	        		'marker-size': 'large',
@@ -29,8 +30,8 @@ var setupMap = function() {
 					iconOptions['marker-symbol'] = icon;
 				}
 
-				var marker = L.marker(latlng, { icon: L.mapbox.marker.icon(iconOptions)
-				});
+				var marker = L.marker(latlng, { draggable: true, icon: L.mapbox.marker.icon(iconOptions) });
+				_dev.marker = marker;
 
 				marker.addTo(map);
 
@@ -46,7 +47,11 @@ var setupMap = function() {
 	var hostname = window.location.hostname;
 	if(hostname === 'russellgoldenberg.github.io' || hostname === 'localhost') {
 		window.getMapZoomLevel = function() {
-			return _rgMaps[0].getZoom();
+			return _dev.map.getZoom();
+		}
+		window.getMarkerCoords = function() {
+			var coords = _dev.marker.getLatLng();
+			return coords.lat + ',' + coords.lng;
 		}
 	}
 };
@@ -57,8 +62,11 @@ var splitCoords = function(input) {
 };
 
 var init = function() {
-	loadCSS('https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css');
-	loadJS('https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js', setupMap);
+	if(!window.rgMapboxLoaded) {
+		window.rgMapboxLoaded = true;
+		loadCSS('https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css');
+		loadJS('https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js', setupMap);
+	}
 };
 
 /*! loadJS: load a JS file asynchronously. [c]2014 @scottjehl, Filament Group, Inc. (Based on http://goo.gl/REQGQ by Paul Irish). Licensed MIT */

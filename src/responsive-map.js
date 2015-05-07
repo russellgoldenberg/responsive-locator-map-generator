@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 	var _filepath;
-	var _version = '0.1.0';
+	var _version = '0.1.1';
 	var _input;
 	var _output;
 	var _failed;
@@ -12,7 +12,7 @@
 		zoom: 11,
 		popup: null,
 		icon: null,
-		inline: null
+		fullwidth: null
 	};
 	var _copy = {
 		hed: 'Hed',
@@ -23,7 +23,7 @@
 	};
 
 	function init() {
-		_filepath = window.location.hostname === 'localhost' ? 'src/' : 'http://apps.bostonglobe.com/common/js/locator-map/'; 
+		_filepath = window.location.hostname === 'localhost' ? 'src/' : 'http://apps.bostonglobe.com/common/js/locator-map/';
 		bindEvents();
 	}
 
@@ -62,13 +62,13 @@
 		});
 
 		$('.option-fullwidth').on('click', function() {
-			_options.inline = null;
+			_options.fullwidth = true;
 			$('.inline button').removeClass('selected');
 			$(this).addClass('selected');
 		});
 
 		$('.option-inline').on('click', function() {
-			_options.inline = true;
+			_options.fullwidth = false;
 			$('.inline button').removeClass('selected');
 			$(this).addClass('selected');
 		});
@@ -158,7 +158,10 @@
 	function generateCode() {
 		updateCopy();
 		updateOptions();
-		_mapId = createId(_coords);
+
+		//update coords
+		var finalCoords = getMarkerCoords();
+		_mapId = createId(finalCoords);
 
 		var html = '';
 
@@ -166,8 +169,8 @@
 
 		html += '<style>' + css + '\n</style>';
 
-		var classOption = _options.inline ? ' pull-map-right' : '';
-		
+		var classOption = _options.fullwidth ? '' : ' pull-map-right';
+
 		html += '\n<div class="rg-container' + classOption + '">';
 		html += '\n\t<div class="rg-header">';
 
@@ -182,7 +185,7 @@
 
 		html += '\n\t\t<div class="rg-map">';
 		html += '\n\t\t\t<div class="rg-map-container" id="rg-map-' + _mapId + '"';
-		html += ' data-coords="' + _coords + '" ';
+		html += ' data-coords="' + finalCoords + '" ';
 		if(_options.popup) {
 			html += 'data-popup="' + _options.popup + '" ';	
 		}
@@ -194,7 +197,7 @@
 		html += '\n\t\t</div>';
 		html += '\n\t</div>';
 		html += '\n</div>';
-		html += '\n<script src="' + _filepath + 'locator-map-' + _version + '.js" type="text/javascript"></script>';
+		html += '\n<script src="http://apps.bostonglobe.com/common/js/locator-map/locator-map-' + _version + '.js" type="text/javascript"></script>';
 
 		$('.output-code').val(html);
 		$('.final').removeClass('hide');
