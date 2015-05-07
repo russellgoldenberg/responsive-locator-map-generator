@@ -62,17 +62,17 @@
 			generateCode();
 		});
 
-		$('.option-fullwidth').on('click', function() {
-			_options.fullwidth = true;
-			$('.inline button').removeClass('selected');
-			$(this).addClass('selected');
-		});
+		// $('.option-fullwidth').on('click', function() {
+		// 	_options.fullwidth = true;
+		// 	$('.inline button').removeClass('selected');
+		// 	$(this).addClass('selected');
+		// });
 
-		$('.option-inline').on('click', function() {
-			_options.fullwidth = false;
-			$('.inline button').removeClass('selected');
-			$(this).addClass('selected');
-		});
+		// $('.option-inline').on('click', function() {
+		// 	_options.fullwidth = false;
+		// 	$('.inline button').removeClass('selected');
+		// 	$(this).addClass('selected');
+		// });
 
 		$('.option-enable-controls').on('click', function() {
 			_options.controls = true;
@@ -229,11 +229,11 @@
 	}
 
 	function updateOptions() {
-		var popup = $('.option-popup').val().trim();
+		// var popup = $('.option-popup').val().trim();
+		// _options.popup = popup || null;
 		// var icon = $('.option-icon').val().trim().toLowerCase().replace(/\s/g, '-');
 		// _options.icon = icon || null;
 		_options.zoom = window.getMapZoomLevel();
-		_options.popup = popup || null;
 		
 		console.log(_options);
 	}
