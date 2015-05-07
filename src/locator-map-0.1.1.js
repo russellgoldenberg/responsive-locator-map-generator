@@ -1,7 +1,13 @@
 var setupMap = function() {
 	var _token = 'pk.eyJ1IjoiZ2FicmllbC1mbG9yaXQiLCJhIjoiVldqX21RVSJ9.Udl7GDHMsMh8EcMpxIr2gA';
 	var _rgMapContainers = document.getElementsByClassName('rg-map-container');
-	var _dev = {};
+	var _dev = { mode: false, map: null, marker: null };
+
+	//some assists for development
+	var hostname = window.location.hostname;
+	if(hostname === 'russellgoldenberg.github.io' || hostname === 'localhost') {
+		_dev.mode = true;
+	}
 
 	if(_rgMapContainers.length) {
 		for(var i = 0; i < _rgMapContainers.length; i++) {
@@ -12,13 +18,25 @@ var setupMap = function() {
 			var popup = el.dataset.popup || false;
 			var icon = el.dataset.icon || false;
 			var loaded = el.dataset.loaded || false;
+			var controls = el.dataset.controls || _dev.mode;
 
 			if(!loaded) {
 				el.dataset.loaded = 'loaded';
 				L.mapbox.accessToken = _token;
 				var latlng = L.latLng([coords.lat, coords.lng]);
 
-				var map = L.mapbox.map(id, 'gabriel-florit.li1b7gf6', {'center': latlng , 'zoom': zoom, 'scrollWheelZoom': false, 'touchZoom': false});
+				var map = L.mapbox.map(id, 'gabriel-florit.li1b7gf6', {
+					'center': latlng,
+					'zoom': zoom,
+					'attributionControl': false,
+					'tap': false,
+					'touchZoom': false,
+					'scrollWheelZoom': false,
+					'zoomControl': controls,
+					'doubleClickZoom': controls,
+					'dragging': controls
+				});
+
 				_dev.map = map;
 
 				var iconOptions = {
@@ -30,7 +48,7 @@ var setupMap = function() {
 					iconOptions['marker-symbol'] = icon;
 				}
 
-				var marker = L.marker(latlng, { draggable: true, icon: L.mapbox.marker.icon(iconOptions) });
+				var marker = L.marker(latlng, { draggable: _dev.mode , icon: L.mapbox.marker.icon(iconOptions) });
 				_dev.marker = marker;
 
 				marker.addTo(map);
@@ -43,9 +61,7 @@ var setupMap = function() {
 		}
 	}
 
-	//some assists for development
-	var hostname = window.location.hostname;
-	if(hostname === 'russellgoldenberg.github.io' || hostname === 'localhost') {
+	if(_dev.mode) {
 		window.getMapZoomLevel = function() {
 			return _dev.map.getZoom();
 		}

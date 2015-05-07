@@ -78,12 +78,9 @@
 	height: 320px;
 	overflow: hidden;
 }
-.leaflet-container p.rg-map-popup {
-	padding: 0 0.75em 0.5em 0.75em;
+p.rg-map-popup {
 	margin: 0;
-}
-.leaflet-container .leaflet-control-attribution {
-	display: none;
+	padding: 0 0.5em 0.5em 0.5em;
 }
 @media (max-width: 640px) {
 .rg-source-and-credit > div {

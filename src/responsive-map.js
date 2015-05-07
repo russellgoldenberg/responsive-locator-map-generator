@@ -7,12 +7,13 @@
 	var _failed;
 	var _mapId;
 	var _coords;
-	var _demo = '42.3155726,-71.0488811';
+	var _demo = '42.3601,-71.0589';
 	var _options = {
 		zoom: 11,
 		popup: null,
 		icon: null,
-		fullwidth: null
+		fullwidth: null,
+		controls: null
 	};
 	var _copy = {
 		hed: 'Hed',
@@ -70,6 +71,18 @@
 		$('.option-inline').on('click', function() {
 			_options.fullwidth = false;
 			$('.inline button').removeClass('selected');
+			$(this).addClass('selected');
+		});
+
+		$('.option-enable-controls').on('click', function() {
+			_options.controls = true;
+			$('.controls button').removeClass('selected');
+			$(this).addClass('selected');
+		});
+
+		$('.option-disable-controls').on('click', function() {
+			_options.controls = false;
+			$('.controls button').removeClass('selected');
 			$(this).addClass('selected');
 		});
 	}
@@ -190,7 +203,10 @@
 			html += 'data-popup="' + _options.popup + '" ';	
 		}
 		if(_options.icon) {
-			html += 'data-icon="' + _options.icon + '"';		
+			html += 'data-icon="' + _options.icon + '" ';		
+		}
+		if(_options.controls) {
+			html += 'data-controls="' + _options.controls + '" ';
 		}
 		html += '>';
 		html += '\n\t\t\t</div>';

@@ -3,12 +3,12 @@ textarea.address {
 	overflow: hidden;
 }
 a.demo {
-	display: block;
+	display: inline-block;
 }
-.inline button {
+.inline button,.controls button {
 	display: inline-block;
 	background: #999;
 }
-.inline button.selected {
+.inline button.selected, .controls button.selected {
 	background: #1a1a1a;
 }

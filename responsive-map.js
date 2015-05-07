@@ -7,12 +7,13 @@
 	var _failed;
 	var _mapId;
 	var _coords;
-	var _demo = '42.3155726,-71.0488811';
+	var _demo = '42.3601,-71.0589';
 	var _options = {
 		zoom: 11,
 		popup: null,
 		icon: null,
-		fullwidth: null
+		fullwidth: null,
+		controls: null
 	};
 	var _copy = {
 		hed: 'Hed',
@@ -72,6 +73,18 @@
 			$('.inline button').removeClass('selected');
 			$(this).addClass('selected');
 		});
+
+		$('.option-enable-controls').on('click', function() {
+			_options.controls = true;
+			$('.controls button').removeClass('selected');
+			$(this).addClass('selected');
+		});
+
+		$('.option-disable-controls').on('click', function() {
+			_options.controls = false;
+			$('.controls button').removeClass('selected');
+			$(this).addClass('selected');
+		});
 	}
 
  	function parseInput(str) {
@@ -120,7 +133,7 @@
 		// var $source = $('<div contenteditable="true" class="rg-source"><span class="pre-colon">' + _copy.sourcePre + '</span>: <span class="post-colon">' + _copy.sourcePost + '</span></div>');
 		// var $credit = $('<div contenteditable="true" class="rg-credit">' + _copy.credit + '</div>');
 		
-		var $inlineStyle = '<style>/*styles for graphic info (hed, subhed, source, credit)*/\n.rg-container {\n\twidth: 100%;\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 16px;\n\tline-height: 1;\n\tmargin: 1em 0;\n\tpadding: 0.75em 0 0 0;\n\tcolor: #1a1a1a;\n\tborder-top: 1px solid #ccc;\n\tclear: both;\n}\n.rg-header {\n\tmargin-bottom: 0.5em;\n}\n.rg-hed {\n\tfont-family: "Benton Sans Bold", Helvetica, Arial, sans-serif;\n\tfont-weight: bold;\n\tfont-size: 1.35em;\n}\n.rg-subhed {\n\tfont-size: 1em;\n\tline-height: 1.4em;\n}\n.rg-source-and-credit {\n\tfont-family: Georgia,"Times New Roman", Times,serif;\n\twidth: 100%;\n\toverflow: hidden;\n\tmargin-top: 1em;\n}\n.rg-source {\n\tmargin: 0;\n\tfloat: left;\n\tfont-weight: bold;\n\tfont-size: 0.75em;\n\tline-height: 1.5em;\n}\n.rg-source .pre-colon {\n\ttext-transform: uppercase;\n}\n.rg-credit {\n\tmargin: 0;\n\tcolor: #999;\n\ttext-transform: uppercase;\n\tletter-spacing: 0.05em;\n\tfloat: right;\n\ttext-align: right;\n\tfont-size: 0.65em;\n\tline-height: 1.5em;\n}\n/*styles for graphic*/\n.rg-map {\n\tmargin: 0;\n\twidth: 100%;\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 1em;\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}\n.rg-map * {\n\t-moz-box-sizing: border-box;\n\tbox-sizing: border-box;\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n\ttext-align: left;\n\tcolor: #333;\n}\n.rg-container.pull-map-right {\n\tfloat: right;\n\tmax-width: 320px;\n\twidth: 100%;\n\tmargin-left: 1em;\n}\n.rg-map-container {\n\twidth: 100%;\n\theight: 320px;\n\toverflow: hidden;\n}\n.leaflet-container p.rg-map-popup {\n\tpadding: 0 0.75em 0.5em 0.75em;\n\tmargin: 0;\n}\n.leaflet-container .leaflet-control-attribution {\n\tdisplay: none;\n}\n@media (max-width: 640px) {\n.rg-source-and-credit > div {\n\twidth: 100%;\n\tdisplay: block;\n\tfloat: none;\n\ttext-align: right;\n}\n.rg-container.pull-map-right {\n\tfloat: none;\n\tmax-width: 100%;\n\twidth: 100%;\n\tmargin-left: 0;\n}\n}</style>';
+		var $inlineStyle = '<style>.rg-container {\n\twidth: 100%;\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 16px;\n\tline-height: 1;\n\tmargin: 1em 0;\n\tpadding: 0.75em 0 0 0;\n\tcolor: #1a1a1a;\n\tborder-top: 1px solid #ccc;\n\tclear: both;\n}\n.rg-header {\n\tmargin-bottom: 0.5em;\n}\n.rg-hed {\n\tfont-family: "Benton Sans Bold", Helvetica, Arial, sans-serif;\n\tfont-weight: bold;\n\tfont-size: 1.35em;\n}\n.rg-subhed {\n\tfont-size: 1em;\n\tline-height: 1.4em;\n}\n.rg-source-and-credit {\n\tfont-family: Georgia,"Times New Roman", Times,serif;\n\twidth: 100%;\n\toverflow: hidden;\n\tmargin-top: 1em;\n}\n.rg-source {\n\tmargin: 0;\n\tfloat: left;\n\tfont-weight: bold;\n\tfont-size: 0.75em;\n\tline-height: 1.5em;\n}\n.rg-source .pre-colon {\n\ttext-transform: uppercase;\n}\n.rg-credit {\n\tmargin: 0;\n\tcolor: #999;\n\ttext-transform: uppercase;\n\tletter-spacing: 0.05em;\n\tfloat: right;\n\ttext-align: right;\n\tfont-size: 0.65em;\n\tline-height: 1.5em;\n}\n.rg-map {\n\tmargin: 0;\n\twidth: 100%;\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 1em;\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}\n.rg-map * {\n\t-moz-box-sizing: border-box;\n\tbox-sizing: border-box;\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n\ttext-align: left;\n\tcolor: #333;\n}\n.rg-container.pull-map-right {\n\tfloat: right;\n\tmax-width: 320px;\n\twidth: 100%;\n\tmargin-left: 1em;\n}\n.rg-map-container {\n\twidth: 100%;\n\theight: 320px;\n\toverflow: hidden;\n}\np.rg-map-popup {\n\tmargin: 0;\n\tpadding: 0 0.5em 0.5em 0.5em;\n}\n@media (max-width: 640px) {\n.rg-source-and-credit > div {\n\twidth: 100%;\n\tdisplay: block;\n\tfloat: none;\n\ttext-align: right;\n}\n.rg-container.pull-map-right {\n\tfloat: none;\n\tmax-width: 100%;\n\twidth: 100%;\n\tmargin-left: 0;\n}\n}</style>';
 
 		_mapId = createId(_coords);
 
@@ -165,7 +178,7 @@
 
 		var html = '';
 
-		var css = '/*styles for graphic info (hed, subhed, source, credit)*/\n.rg-container {\n\twidth: 100%;\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 16px;\n\tline-height: 1;\n\tmargin: 1em 0;\n\tpadding: 0.75em 0 0 0;\n\tcolor: #1a1a1a;\n\tborder-top: 1px solid #ccc;\n\tclear: both;\n}\n.rg-header {\n\tmargin-bottom: 0.5em;\n}\n.rg-hed {\n\tfont-family: "Benton Sans Bold", Helvetica, Arial, sans-serif;\n\tfont-weight: bold;\n\tfont-size: 1.35em;\n}\n.rg-subhed {\n\tfont-size: 1em;\n\tline-height: 1.4em;\n}\n.rg-source-and-credit {\n\tfont-family: Georgia,"Times New Roman", Times,serif;\n\twidth: 100%;\n\toverflow: hidden;\n\tmargin-top: 1em;\n}\n.rg-source {\n\tmargin: 0;\n\tfloat: left;\n\tfont-weight: bold;\n\tfont-size: 0.75em;\n\tline-height: 1.5em;\n}\n.rg-source .pre-colon {\n\ttext-transform: uppercase;\n}\n.rg-credit {\n\tmargin: 0;\n\tcolor: #999;\n\ttext-transform: uppercase;\n\tletter-spacing: 0.05em;\n\tfloat: right;\n\ttext-align: right;\n\tfont-size: 0.65em;\n\tline-height: 1.5em;\n}\n/*styles for graphic*/\n.rg-map {\n\tmargin: 0;\n\twidth: 100%;\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 1em;\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}\n.rg-map * {\n\t-moz-box-sizing: border-box;\n\tbox-sizing: border-box;\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n\ttext-align: left;\n\tcolor: #333;\n}\n.rg-container.pull-map-right {\n\tfloat: right;\n\tmax-width: 320px;\n\twidth: 100%;\n\tmargin-left: 1em;\n}\n.rg-map-container {\n\twidth: 100%;\n\theight: 320px;\n\toverflow: hidden;\n}\n.leaflet-container p.rg-map-popup {\n\tpadding: 0 0.75em 0.5em 0.75em;\n\tmargin: 0;\n}\n.leaflet-container .leaflet-control-attribution {\n\tdisplay: none;\n}\n@media (max-width: 640px) {\n.rg-source-and-credit > div {\n\twidth: 100%;\n\tdisplay: block;\n\tfloat: none;\n\ttext-align: right;\n}\n.rg-container.pull-map-right {\n\tfloat: none;\n\tmax-width: 100%;\n\twidth: 100%;\n\tmargin-left: 0;\n}\n}';
+		var css = '.rg-container {\n\twidth: 100%;\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 16px;\n\tline-height: 1;\n\tmargin: 1em 0;\n\tpadding: 0.75em 0 0 0;\n\tcolor: #1a1a1a;\n\tborder-top: 1px solid #ccc;\n\tclear: both;\n}\n.rg-header {\n\tmargin-bottom: 0.5em;\n}\n.rg-hed {\n\tfont-family: "Benton Sans Bold", Helvetica, Arial, sans-serif;\n\tfont-weight: bold;\n\tfont-size: 1.35em;\n}\n.rg-subhed {\n\tfont-size: 1em;\n\tline-height: 1.4em;\n}\n.rg-source-and-credit {\n\tfont-family: Georgia,"Times New Roman", Times,serif;\n\twidth: 100%;\n\toverflow: hidden;\n\tmargin-top: 1em;\n}\n.rg-source {\n\tmargin: 0;\n\tfloat: left;\n\tfont-weight: bold;\n\tfont-size: 0.75em;\n\tline-height: 1.5em;\n}\n.rg-source .pre-colon {\n\ttext-transform: uppercase;\n}\n.rg-credit {\n\tmargin: 0;\n\tcolor: #999;\n\ttext-transform: uppercase;\n\tletter-spacing: 0.05em;\n\tfloat: right;\n\ttext-align: right;\n\tfont-size: 0.65em;\n\tline-height: 1.5em;\n}\n.rg-map {\n\tmargin: 0;\n\twidth: 100%;\n\tfont-family: Helvetica, Arial, sans-serif;\n\tfont-size: 1em;\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}\n.rg-map * {\n\t-moz-box-sizing: border-box;\n\tbox-sizing: border-box;\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n\ttext-align: left;\n\tcolor: #333;\n}\n.rg-container.pull-map-right {\n\tfloat: right;\n\tmax-width: 320px;\n\twidth: 100%;\n\tmargin-left: 1em;\n}\n.rg-map-container {\n\twidth: 100%;\n\theight: 320px;\n\toverflow: hidden;\n}\np.rg-map-popup {\n\tmargin: 0;\n\tpadding: 0 0.5em 0.5em 0.5em;\n}\n@media (max-width: 640px) {\n.rg-source-and-credit > div {\n\twidth: 100%;\n\tdisplay: block;\n\tfloat: none;\n\ttext-align: right;\n}\n.rg-container.pull-map-right {\n\tfloat: none;\n\tmax-width: 100%;\n\twidth: 100%;\n\tmargin-left: 0;\n}\n}';
 
 		html += '<style>' + css + '\n</style>';
 
@@ -190,7 +203,10 @@
 			html += 'data-popup="' + _options.popup + '" ';	
 		}
 		if(_options.icon) {
-			html += 'data-icon="' + _options.icon + '"';		
+			html += 'data-icon="' + _options.icon + '" ';		
+		}
+		if(_options.controls) {
+			html += 'data-controls="' + _options.controls + '" ';
 		}
 		html += '>';
 		html += '\n\t\t\t</div>';
