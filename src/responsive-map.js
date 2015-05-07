@@ -199,6 +199,7 @@
 		html += '\n\t\t<div class="rg-map">';
 		html += '\n\t\t\t<div class="rg-map-container" id="rg-map-' + _mapId + '"';
 		html += ' data-coords="' + finalCoords + '" ';
+		html += 'data-zoom="' + _options.zoom + '" ';
 		if(_options.popup) {
 			html += 'data-popup="' + _options.popup + '" ';	
 		}
@@ -229,10 +230,10 @@
 
 	function updateOptions() {
 		var popup = $('.option-popup').val().trim();
-		var icon = $('.option-icon').val().trim().toLowerCase().replace(/\s/g, '-');
+		// var icon = $('.option-icon').val().trim().toLowerCase().replace(/\s/g, '-');
+		// _options.icon = icon || null;
 		_options.zoom = window.getMapZoomLevel();
 		_options.popup = popup || null;
-		_options.icon = icon || null;
 		
 		console.log(_options);
 	}
